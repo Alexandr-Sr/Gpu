@@ -1,0 +1,54 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<article class="mb-4">
+  <header class="mb-3">
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge badge-neon">{{ guide.category }}</span>
+      <h2 class="m-0">{{ guide.title }}</h2>
+    </div>
+    <div class="text-secondary small">Автор: <a href="{{ url_for('main.profile', username=guide.author.username) }}">{{ guide.author.username }}</a> • {{ guide.created_at.strftime('%d.%m.%Y %H:%M') }}</div>
+    {% if session.get('user_id') and (guide.author_id == session.get('user_id') or session.get('role') == 'admin') %}
+  <div class="mb-3 d-flex gap-2">
+    <a class="btn btn-sm btn-neon" href="{{ url_for('main.edit_guide', gid=guide.id) }}">Редактировать</a>
+    <form method="post" action="{{ url_for('main.delete_guide', gid=guide.id) }}"
+          onsubmit="return confirm('Удалить гайд безвозвратно?');">
+      <button class="btn btn-sm btn-outline-danger">Удалить</button>
+    </form>
+  </div>
+{% endif %}
+  </header>
+  {% if guide.image_url %}
+    <img src="{{ guide.image_url }}" class="img-fluid rounded mb-3" alt="cover">
+  {% endif %}
+  <p style="white-space: pre-wrap;">{{ guide.description }}</p>
+</article>
+
+<section class="mb-4">
+  <h4 class="mb-3">Комментарии</h4>
+  {% if guide.comments %}
+    <div class="list-group">
+      {% for c in guide.comments|sort(attribute='created_at', reverse=True) %}
+      <div class="list-group-item bg-transparent border-secondary">
+        <div class="small text-secondary mb-1"><a href="{{ url_for('main.profile', username=c.author.username) }}">{{ c.author.username }}</a> • {{ c.created_at.strftime('%d.%m.%Y %H:%M') }}</div>
+        <div style="white-space: pre-wrap;">{{ c.text }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-secondary">Пока нет комментариев.</p>
+  {% endif %}
+</section>
+
+{% if session.get('user_id') %}
+<form class="card p-3" method="post" action="{{ url_for('main.add_comment', gid=guide.id) }}">
+  <div class="mb-2">
+    <label class="form-label">Ваш комментарий</label>
+    <textarea class="form-control" name="text" rows="3" required></textarea>
+  </div>
+  <button class="btn btn-neon">Отправить</button>
+</form>
+{% else %}
+<p><a href="{{ url_for('auth.login') }}">Войдите</a>, чтобы комментировать.</p>
+{% endif %}
+{% endblock %}

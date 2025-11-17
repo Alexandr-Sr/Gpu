@@ -1,0 +1,71 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Админ‑панель</h2>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3">
+      <h5>Статистика</h5>
+      <ul class="list-unstyled small text-secondary">
+        <li>Пользователи: {{ stats.users }}</li>
+        <li>Гайды: {{ stats.guides }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card p-3">
+      <h5>Пользователи</h5>
+      <div class="table-responsive">
+        <table class="table table-dark table-sm align-middle">
+          <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th></th></tr></thead>
+          <tbody>
+            {% for u in users %}
+            <tr>
+              <td>{{ u.id }}</td>
+              <td>{{ u.username }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.role }}</td>
+              <td>
+                <form method="post" action="{{ url_for('admin.set_role') }}" class="d-flex gap-2">
+                  <input type="hidden" name="user_id" value="{{ u.id }}">
+                  <select name="role" class="form-select form-select-sm" style="width: 9rem;">
+                    <option value="user" {% if u.role=='user' %}selected{% endif %}>user</option>
+                    <option value="admin" {% if u.role=='admin' %}selected{% endif %}>admin</option>
+                  </select>
+                  <button class="btn btn-sm btn-neon">OK</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card p-3 mt-3">
+  <h5>Гайды</h5>
+  <div class="table-responsive">
+    <table class="table table-dark table-sm align-middle">
+      <thead><tr><th>ID</th><th>Title</th><th>Автор</th><th>Дата</th><th></th></tr></thead>
+      <tbody>
+        {% for g in guides %}
+        <tr>
+          <td>{{ g.id }}</td>
+          <td>{{ g.title }}</td>
+          <td>{{ g.author.username }}</td>
+          <td>{{ g.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+          <td>
+            <form method="post" action="{{ url_for('admin.delete_guide') }}">
+              <input type="hidden" name="guide_id" value="{{ g.id }}">
+              <button class="btn btn-sm btn-outline-danger">Удалить</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+
+:root {
+  --bg: #0c0d11;
+  --card: #13151c;
+  --text: #e8e8f2;
+  --muted: #a0a3ad;
+  --neon1: #00e7ff;
+  --neon2: #9d4edd;
+}
+body {
+  background: radial-gradient(1200px 800px at 10% 10%, #0f1120 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+.navbar {
+  background: rgba(19,21,28,0.8);
+  backdrop-filter: blur(8px);
+}
+.card {
+  background: linear-gradient(180deg, rgba(19,21,28,0.9), rgba(19,21,28,0.6));
+  border: 1px solid #1c1f29;
+  box-shadow: 0 0 0.5rem rgba(0,0,0,0.4);
+}
+a { color: var(--neon1); }
+.btn-neon {
+  border: 1px solid var(--neon1);
+  color: var(--neon1);
+}
+.btn-neon:hover {
+  background: var(--neon1);
+  color: #000;
+}
+.badge-neon { background: var(--neon2); }
+img.guide-cover { max-height: 260px; object-fit: cover; }
+footer { color: var(--muted); font-size: 0.9rem; }

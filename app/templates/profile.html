@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">Профиль: {{ user.username }}</h2>
+  {% if session.get('username') == user.username %}
+    <span class="badge bg-secondary">Вы</span>
+  {% endif %}
+</div>
+<p class="text-secondary">Email: {{ user.email }} • Роль: {{ user.role }}</p>
+<h4 class="mt-4">Публикации</h4>
+<div class="row g-3">
+  {% for g in guides %}
+  <div class="col-md-4">
+    <div class="card h-100">
+      {% if g.image_url %}
+      <img src="{{ g.image_url }}" class="card-img-top guide-cover" alt="cover">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ g.title }}</h5>
+        <p class="card-text text-secondary">{{ g.description[:120] }}...</p>
+        <a href="{{ url_for('main.guide_detail', gid=g.id) }}" class="stretched-link"></a>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <p class="text-secondary">Пока публикаций нет.</p>
+  {% endfor %}
+</div>
+{% endblock %}

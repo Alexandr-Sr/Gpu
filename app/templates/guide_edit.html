@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Редактирование гайда</h2>
+<form class="card p-3" method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label class="form-label">Название</label>
+    <input class="form-control" name="title" value="{{ guide.title }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Категория</label>
+    <select class="form-select" name="category" required>
+      {% for c in CATEGORIES %}
+        <option value="{{ c }}" {% if guide.category == c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Обложка (необязательно — чтобы заменить)</label>
+    {% if guide.image_url %}
+      <div class="mb-2">
+        <img src="{{ guide.image_url }}" class="img-fluid rounded" style="max-height:180px;object-fit:cover">
+      </div>
+    {% endif %}
+    <input type="file" class="form-control" name="image" accept="image/*">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Описание</label>
+    <textarea class="form-control" name="description" rows="8" required>{{ guide.description }}</textarea>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-neon">Сохранить</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('main.guide_detail', gid=guide.id) }}">Отмена</a>
+  </div>
+</form>
+{% endblock %}

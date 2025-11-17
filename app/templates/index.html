@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <div class="p-4 rounded-3 mb-4" style="background:linear-gradient(135deg, rgba(0,231,255,0.06), rgba(157,78,221,0.06)); border:1px solid #1f2230;">
+    <h1 class="display-5 fw-bold">Сервис гайдов по видеокартам</h1>
+    <p class="lead">Обслуживание, ремонт, опыт. Публикуйте и обсуждайте материалы.</p>
+    <a href="{{ url_for('main.guides_list') }}" class="btn btn-neon btn-lg">К гайдам</a>
+  </div>
+
+  <h3 class="mb-3">Последние гайды</h3>
+  <div class="row g-3">
+    {% for g in guides %}
+    <div class="col-md-4">
+      <div class="card h-100">
+        {% if g.image_url %}
+        <img src="{{ g.image_url }}" class="card-img-top guide-cover" alt="cover">
+        {% endif %}
+        <div class="card-body">
+          <span class="badge badge-neon mb-2">{{ g.category }}</span>
+          <h5 class="card-title">{{ g.title }}</h5>
+          <p class="card-text text-secondary">{{ g.description[:120] }}...</p>
+          <a href="{{ url_for('main.guide_detail', gid=g.id) }}" class="stretched-link"></a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+      <p class="text-secondary">Пока нет публикаций.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

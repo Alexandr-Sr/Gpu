@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Привязка Telegram{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Привязка Telegram</h2>
+
+<p>Чтобы привязать аккаунт Telegram к вашему профилю на сайте:</p>
+<ol>
+  <li>Нажмите «Сгенерировать код» ниже.</li>
+  <li>Откройте Telegram и напишите боту команду: <code>/link &lt;ваш_код&gt;</code></li>
+  <li>После успешной привязки вы сможете добавлять гайды через бота.</li>
+</ol>
+
+<form method="post" action="{{ url_for('main.link_telegram_generate') }}">
+  <button class="btn btn-neon">Сгенерировать код</button>
+</form>
+
+{% if code %}
+  <div class="card mt-3 p-3">
+    <div><b>Ваш код:</b> <code style="font-size:1.2rem">{{ code }}</code></div>
+    {% if expires_at %}
+      <div class="text-secondary">Действует до: {{ expires_at }}</div>
+    {% endif %}
+    <div class="mt-2">Отправьте в Telegram-боте: <code>/link {{ code }}</code></div>
+  </div>
+{% endif %}
+
+{% if session.get('role') == 'admin' and current_user and current_user.telegram_id %}
+  <div class="alert alert-success mt-3">
+    Аккаунт Telegram привязан (telegram_id={{ current_user.telegram_id }}).
+  </div>
+{% endif %}
+{% endblock %}
